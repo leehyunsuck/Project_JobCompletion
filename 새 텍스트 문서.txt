@@ -1,0 +1,5 @@
+회원가입하면
+
+userinfo에 저장
+
+questions
