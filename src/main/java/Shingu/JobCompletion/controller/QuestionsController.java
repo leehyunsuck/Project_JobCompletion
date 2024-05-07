@@ -42,7 +42,6 @@ public class QuestionsController {
         String a9 = form.getAnswers9();
         String a10 = form.getAnswers10();
 
-
         questionsRepository.save(questions);
         return ResponseEntity.ok().body("Questions saved successfully");
     }

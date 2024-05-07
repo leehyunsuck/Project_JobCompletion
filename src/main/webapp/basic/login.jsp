@@ -28,6 +28,12 @@
 <section id="banner">
     <div class="inner">
         <h2>로그인</h2>
+        <%
+            String loginEmail = (String) session.getAttribute("loginEmail");
+            if (loginEmail == null) {
+                session.invalidate();
+            }
+        %>
         <form method="post" action="">
 
             <div class="col-9 col-12-xsmall">

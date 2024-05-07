@@ -1,5 +1,6 @@
 package Shingu.JobCompletion.basic;
 
+import Shingu.JobCompletion.servic.UserInfoService;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -18,11 +19,20 @@ import java.util.regex.Pattern;
 
 @WebServlet(name = "EmailSend", value = "/emailSend")
 public class EmailSend extends HttpServlet {
+
+
+
     private static final String EMAIL_REGEX =
             "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
                     "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
     private static final Pattern pattern = Pattern.compile(EMAIL_REGEX);
+
+    private final UserInfoService userInfoService;
+
+    public EmailSend(UserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
+    }
 
     public static boolean isValidEmail(String email) {
         Matcher matcher = pattern.matcher(email);
@@ -33,6 +43,9 @@ public class EmailSend extends HttpServlet {
 //        super.service(req, resp);
         String email = req.getParameter("email");
 
+        req.getSession().setAttribute("invalidEmail", false);
+        req.getSession().setAttribute("alreadyEmail", false);
+
         if (!isValidEmail(email)) {
             req.getSession().setAttribute("email", email);
             req.getSession().setAttribute("invalidEmail", true);
@@ -40,6 +53,13 @@ public class EmailSend extends HttpServlet {
             return;
         }
 
+        //이미 있는 이메일인지 확인 하는 코드 부분
+        if (userInfoService.isEmailExists(email)) {
+            req.getSession().setAttribute("email", email);
+            req.getSession().setAttribute("alreadyEmail", true);
+            resp.sendRedirect("/basic/register.jsp");
+            return;
+        }
         Random random = new Random();
         int code = random.nextInt(900000) + 100000;
 
