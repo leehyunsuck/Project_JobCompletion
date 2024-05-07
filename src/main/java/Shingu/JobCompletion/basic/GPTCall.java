@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -81,12 +80,11 @@ public class GPTCall extends HttpServlet {
 
         //웹에 보내기 테스트
         JSONObject sendJson = new JSONObject(s);
-        String[] sendQuestions = new String[count];
-        for (int i = 1; i <= count; i++) sendQuestions[i - 1] = sendJson.getString("Question " + i);
-        req.setAttribute("sendQuestions", sendQuestions);
+        String[] questions = new String[count];
+        for (int i = 1; i <= count; i++) questions[i - 1] = sendJson.getString("Question " + i);
+        req.setAttribute("questions", questions);
         req.setAttribute("email", email);
         req.setAttribute("keyword", keyword);
-        req.setAttribute("count", count);
         //여기에 페이지로 이동하는거
 
         JSONObject jsonObject = null;

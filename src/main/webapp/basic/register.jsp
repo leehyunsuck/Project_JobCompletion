@@ -1,4 +1,4 @@
-<%--
+<%@ page import="org.eclipse.tags.shaded.org.apache.xpath.operations.Bool" %><%--
   Created by IntelliJ IDEA.
   User: 5talk
   Date: 2024-04-30
@@ -28,10 +28,27 @@
 <section id="banner">
     <div class="inner">
         <h2>회원가입</h2>
-        <form method="post" action="">
 
+        <%
+            String loginEmail = (String) session.getAttribute("loginEmail");
+            if (loginEmail != null) {
+                response.sendRedirect("http://localhost:8080/basic/index.jsp");
+            }
+            String email = (String) request.getSession().getAttribute("email");
+            Integer code = (Integer) request.getSession().getAttribute("code");
+            Boolean invalidEmail = (Boolean) request.getSession().getAttribute("invalidEmail");
+            Boolean invalidCode = (Boolean) request.getSession().getAttribute("invalidCode");
+            Boolean check = (Boolean) request.getSession().getAttribute("check");
+            if (invalidEmail == null) invalidEmail = false;
+            if (invalidCode == null) invalidCode = false;
+            if (check == null) check = false;
+        %>
+
+        <%-- 인증 완료 후 폼--%>
+        <% if (check) { %>
+        <form method="post" action="http://localhost:8080/register">
             <div class="col-6 col-12-xsmall">
-                <input type="text" name="" value="" placeholder="이메일" />
+                <input type="email" name="email" value="<%=email%>" readonly/>
             </div>
             <div class="col-6 col-12-xsmall">
                 <input type="text" name="password" value="" placeholder="패스워드" />
@@ -39,21 +56,42 @@
             <div class="col-6 col-12-xsmall">
                 <input type="text" name="check-password" value="" placeholder="패스워드 확인" />
             </div>
-
-            <br>
-            <div class="col-3 col-12-xsmall">
-                <button type="button" id="send-verification">Send code</button>
-            </div>
-            <br>
-            <div class="col-6 col-12-xsmall">
-                <input type="text" name="password" value="" placeholder="인증번호" />
-            </div>
             <br>
             <div class="col-3 col-12-xsmall">
                 <input type="submit" value="Register" class="primary" />
             </div>
         </form>
-        <a href="login.jsp">로그인</a>
+        <% } else { %>
+
+        <%-- 이메일 작성 후 코드 전송 --%>
+        <% if (code == null) { %>
+        <form method="post" action="http://localhost:8080/emailSend">
+            <% if (invalidEmail) { %>
+            <p style="color: red;">유효하지 않은 이메일 주소입니다</p>
+            <% } %>
+            <input type="text" name="email" value="<%=email == null ? "" : email%>" placeholder="이메일"/>
+            <input type="submit" value="sendCode" class="primary"/>
+        </form>
+
+        <%-- 인증번호 확인하는 폼 --%>
+        <% } else { %>
+        <p><%=code%>, <%=check%></p>
+        <form method="post" action="http://localhost:8080/checkCode">
+            <% if (invalidCode) { %>
+            <p style="color: red;">유효하지 않은 인증번호 입니다.</p>
+            <% } %>
+            <div class="col-6 col-12-xsmall">
+                <input type="email" name="email" value="<%=email%>" readonly/>
+            </div>
+            <input type="text" name="inputCode" value="">
+            <input type="submit" value="checkCode" class="primary"/>
+        </form>
+        <form method="post" action="http://localhost:8080/basic/register.jsp">
+            <input type="submit" value="rewrite email" class="primary"/>
+        </form>
+        <% }} %>
+
+        <a href="basic/login.jsp">로그인</a>
         <a href="findAccount.jsp">회원정보 찾기</a>
     </div>
 

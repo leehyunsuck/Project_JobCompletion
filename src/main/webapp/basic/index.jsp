@@ -21,7 +21,15 @@
 <!-- Header -->
 <header id="header">
     <a class="logo" href="index.jsp">취업완</a>
+    <%
+        String loginEmail = (String) session.getAttribute("loginEmail");
+        if (loginEmail == null) {
+            session.invalidate();
+    %>
     <a class="logo" href="login.jsp">로그인</a>
+    <%
+        }
+    %>
 </header>
 
 <!-- Banner -->
@@ -113,33 +121,6 @@
                     <p>원자력공학과 직업과 관련된 자질은 무엇이라고 생각하십니까?</p>
                 </div>
             </section>
-            <!--						<section>-->
-            <!--							<div class="content">-->
-            <!--								<header>-->
-            <!--									<a class="icon fa-line-chart"></a>-->
-            <!--									<h3>title</h3>-->
-            <!--								</header>-->
-            <!--								<p>content</p>-->
-            <!--							</div>-->
-            <!--						</section>-->
-            <!--						<section>-->
-            <!--							<div class="content">-->
-            <!--								<header>-->
-            <!--									<a class="icon fa-paper-plane-o"></a>-->
-            <!--									<h3>title</h3>-->
-            <!--								</header>-->
-            <!--								<p>content</p>-->
-            <!--							</div>-->
-            <!--						</section>-->
-            <!--						<section>-->
-            <!--							<div class="content">-->
-            <!--								<header>-->
-            <!--									<a class="icon fa-qrcode"></a>-->
-            <!--									<h3>title</h3>-->
-            <!--								</header>-->
-            <!--								<p>content<p/>-->
-            <!--							</div>-->
-            <!--						</section>-->
         </div>
     </div>
 </section>
@@ -191,18 +172,6 @@
         </div>
     </div>
 </footer>
-
-<%
-String error = (String) session.getAttribute("error");
-if (error != null && !error.isEmpty()) {
-    session.removeAttribute("error");
-%>
-<script>
-alert('<%= error %>');
-</script>
-<%
-}
-%>
 
 <!-- Scripts -->
 <script src="../basic/assets/js/jquery.min.js"></script>
