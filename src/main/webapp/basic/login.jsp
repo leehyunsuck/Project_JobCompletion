@@ -32,9 +32,8 @@
             String loginEmail = (String) session.getAttribute("loginEmail");
             if (loginEmail == null) {
                 session.invalidate();
-            }
         %>
-        <form method="post" action="">
+        <form method="post" action="http://localhost:8080/login">
 
             <div class="col-9 col-12-xsmall">
                 <input type="text" name="id" value="" placeholder="아이디 입력란" />
@@ -51,6 +50,7 @@
             </div>
 
         </form>
+        <% } %>
         <a href="register.jsp">회원가입</a>
         <a href="findAccount.jsp">회원정보 찾기</a>
     </div>

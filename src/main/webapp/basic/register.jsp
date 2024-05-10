@@ -58,10 +58,10 @@
             <p style="color: red;">비밀번호가 동일하지 않습니다.</p>
             <% } %>
             <div class="col-6 col-12-xsmall">
-                <input type="text" name="password" value="" placeholder="패스워드" />
+                <input type="password" name="password" value="" placeholder="패스워드" />
             </div>
             <div class="col-6 col-12-xsmall">
-                <input type="text" name="checkPassword" value="" placeholder="패스워드 확인" />
+                <input type="password" name="checkPassword" value="" placeholder="패스워드 확인" />
             </div>
             <br>
             <div class="col-3 col-12-xsmall">
@@ -85,7 +85,10 @@
 
         <%-- 인증번호 확인하는 폼 --%>
         <% } else { %>
+        <%--
+        code(인증번호) 확인 테스트
         <p><%=code%>, <%=check%></p>
+        --%>
         <form method="post" action="http://localhost:8080/checkCode">
             <% if (invalidCode) { %>
             <p style="color: red;">유효하지 않은 인증번호 입니다.</p>
