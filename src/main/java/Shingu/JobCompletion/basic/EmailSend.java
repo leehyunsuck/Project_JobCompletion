@@ -9,7 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.mail.javamail.MimeMessageHelper;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -19,8 +18,6 @@ import java.util.regex.Pattern;
 
 @WebServlet(name = "EmailSend", value = "/emailSend")
 public class EmailSend extends HttpServlet {
-
-
 
     private static final String EMAIL_REGEX =
             "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
