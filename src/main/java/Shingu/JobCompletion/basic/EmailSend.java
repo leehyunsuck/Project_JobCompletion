@@ -43,7 +43,8 @@ public class EmailSend extends HttpServlet {
         req.getSession().setAttribute("invalidEmail", false);
         req.getSession().setAttribute("alreadyEmail", false);
 
-        if (!isValidEmail(email)) {
+        //이메일 패턴이 아니거나 이메일 주소가 말도 안되게 길 때 다시 작성하게 보내기
+        if (!isValidEmail(email) || email.length() > 320) {
             req.getSession().setAttribute("email", email);
             req.getSession().setAttribute("invalidEmail", true);
             resp.sendRedirect("/basic/register.jsp");

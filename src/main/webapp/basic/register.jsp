@@ -41,11 +41,13 @@
             Boolean check = (Boolean) request.getSession().getAttribute("check");
             Boolean alreadyEmail = (Boolean) request.getSession().getAttribute("alreadyEmail");
             Boolean notEqualsPassword = (Boolean) request.getSession().getAttribute("notEqualsPassword");
+            Boolean passwordLength = (Boolean) request.getSession().getAttribute("passwordLength");
             if (invalidEmail == null) invalidEmail = false;
             if (invalidCode == null) invalidCode = false;
             if (check == null) check = false;
             if (alreadyEmail == null) alreadyEmail = false;
             if (notEqualsPassword == null) notEqualsPassword = false;
+            if (passwordLength == null) passwordLength = false;
         %>
 
         <%-- 인증 완료 후 폼--%>
@@ -56,6 +58,11 @@
             </div>
             <% if (notEqualsPassword) { %>
             <p style="color: red;">비밀번호가 동일하지 않습니다.</p>
+            <% } %>
+            <% if (passwordLength) { %>
+            <p style="color: red;">비밀번호는 7자 이상, 30자 이하로 입력해주세요.</p>
+            <% } else { %>
+            <p style="color: cornflowerblue;">비밀번호는 7자 이상, 30자 이하로 입력해주세요.</p>
             <% } %>
             <div class="col-6 col-12-xsmall">
                 <input type="password" name="password" value="" placeholder="패스워드" />
@@ -85,13 +92,11 @@
 
         <%-- 인증번호 확인하는 폼 --%>
         <% } else { %>
-        <%--
-        code(인증번호) 확인 테스트
-        <p><%=code%>, <%=check%></p>
-        --%>
         <form method="post" action="http://localhost:8080/checkCode">
             <% if (invalidCode) { %>
             <p style="color: red;">유효하지 않은 인증번호 입니다.</p>
+            <% } else { %>
+            <p style="color:deepskyblue">이메일로 전송된 인증번호를 입력해주세요</p>
             <% } %>
             <div class="col-6 col-12-xsmall">
                 <input type="email" name="email" value="<%=email%>" readonly/>
