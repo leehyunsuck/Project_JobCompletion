@@ -40,7 +40,7 @@ public class UserInfoController extends HttpServlet {
                 return;
             }
             
-            //SHA-256해시 함수로 암호화
+            //암호화 값 받기
             String hashPassword = JobCompletionEncode.encode(email, password);
 
             if (hashPassword == null) {
