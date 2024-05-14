@@ -83,7 +83,7 @@
             <p style="color: red;">이미 등록된 이메일 주소입니다.</p>
             <% } %>
             <input type="text" name="email" value="<%=email == null ? "" : email%>" placeholder="이메일"/>
-            <input type="submit" value="sendCode" class="primary"/>
+            <input type="submit" value="sendCode" class="primary"  id="submitBtn"/>
         </form>
 
         <%-- 인증번호 확인하는 폼 --%>
@@ -128,7 +128,14 @@
 <script src="../basic/assets/js/breakpoints.min.js"></script>
 <script src="../basic/assets/js/util.js"></script>
 <script src="../basic/assets/js/main.js"></script>
+<!-- 이메일로 인증코드 전송이 버튼 비활성화-->
+<script>
+    document.querySelector('form').addEventListener('submit', function() {
+        document.getElementById('submitBtn').disabled = true;
+    });
+</script>
 
 
 </body>
 </html>
+
