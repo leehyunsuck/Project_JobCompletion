@@ -24,12 +24,6 @@ public class CustomBotController {
     @Autowired
     private RestTemplate template;
 
-//    @GetMapping("/chat")
-//    public String chat(@RequestParam("prompt") String prompt) {
-//        ChatGPTRequest request = new ChatGPTRequest(model, prompt);
-//        ChatGPTResponse chatGPTResponse = template.postForObject(apiURL, request, ChatGPTResponse.class);
-//        return chatGPTResponse.getChoices().get(0).getMessage().getContent();
-//    }
     public ChatGPTResponse chat(@RequestParam("prompt") String prompt) {
         ChatGPTRequest request = new ChatGPTRequest(model, prompt);
         return template.postForObject(apiURL, request, ChatGPTResponse.class);

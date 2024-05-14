@@ -36,7 +36,7 @@ public class UserInfoController extends HttpServlet {
             //비밀번호 최대 최소 길이 설정
             if (password.length() > 30 || password.length() < 7) {
                 req.getSession().setAttribute("passwordLength", true);
-                resp.sendRedirect("http://localhost:8080/basic/register.jsp");
+                resp.sendRedirect("/basic/register.jsp");
                 return;
             }
             
@@ -44,7 +44,7 @@ public class UserInfoController extends HttpServlet {
             String hashPassword = JobCompletionEncode.encode(email, password);
 
             if (hashPassword == null) {
-                resp.sendRedirect("localhost:8080/basic/index.jsp");
+                resp.sendRedirect("/basic/index.jsp");
                 return;
             }
 
@@ -53,10 +53,10 @@ public class UserInfoController extends HttpServlet {
             user.setEmail(email);
             user.setPassword(hashPassword);
             userInfoService.saveUser(user);
-            resp.sendRedirect("http://localhost:8080/basic/login.jsp");
+            resp.sendRedirect("/basic/login.jsp");
         } else {
             req.getSession().setAttribute("notEqualsPassword", true);
-            resp.sendRedirect("http://localhost:8080/basic/register.jsp");
+            resp.sendRedirect("/basic/register.jsp");
         }
     }
 }
