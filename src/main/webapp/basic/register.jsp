@@ -75,7 +75,7 @@
 
         <%-- 이메일 작성 후 코드 전송 --%>
         <% if (code == null || alreadyEmail) { %>
-        <form method="post" action="/emailSend">
+        <form method="post" action="/emailSendRegister">
             <% if (invalidEmail) { %>
             <p style="color: red;">유효하지 않은 이메일 주소입니다</p>
             <% } %>
@@ -103,7 +103,7 @@
         <% }} %>
 
         <a href="login.jsp">로그인</a>
-        <a href="findAccount.jsp">회원정보 찾기</a>
+        <a href="findAccount.jsp">비밀번호 변경</a>
     </div>
 
     <video autoplay loop muted playsinline src="../basic/images/banner.mp4"></video>

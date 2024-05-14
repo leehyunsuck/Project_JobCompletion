@@ -22,10 +22,16 @@ public class UserInfoService {
         return userInfoRepository.findByEmailAndPassword(email, password) != null;
     }
 
-
     public UserInfo saveUser(UserInfo user) {
         return userInfoRepository.save(user);
     }
+
+    public UserInfo findByEmail(String email) {
+        return userInfoRepository.findByEmail(email);
+    }
+
+
+
     @Autowired
     private UserInfoRepository userInfoRepository;
 

@@ -49,7 +49,6 @@ public class UserInfoLoginController extends HttpServlet {
             return;
         }
 
-        System.out.println("로그인 성공");
         req.getSession().setAttribute("loginEmail", email);
         resp.sendRedirect("/basic/index.jsp");
     }

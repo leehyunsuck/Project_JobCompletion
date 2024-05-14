@@ -49,7 +49,7 @@
             </div>
 
             <div class="col-9 col-12-xsmall">
-                <input type="text" name="password" value="" placeholder="패스워드 입력란" />
+                <input type="password" name="password" value="" placeholder="패스워드 입력란" />
             </div>
 
             <br>
@@ -63,7 +63,7 @@
                 return;
         }%>
         <a href="register.jsp">회원가입</a>
-        <a href="findAccount.jsp">회원정보 찾기</a>
+        <a href="findAccount.jsp">비밀번호 변경</a>
     </div>
     <video autoplay loop muted playsinline src="../basic/images/banner.mp4"></video>
 </section>

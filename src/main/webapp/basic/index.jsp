@@ -28,7 +28,7 @@
     %>
     <a class="logo" href="login.jsp">로그인</a>
     <% } else { %>
-    <a><%=loginEmail%>님 환영합니다.</a>
+    <p style="color: white;"><%=loginEmail%> 님 환영합니다.</p>
     <% } %>
 </header>
 

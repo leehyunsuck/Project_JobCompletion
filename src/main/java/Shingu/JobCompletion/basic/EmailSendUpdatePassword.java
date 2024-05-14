@@ -16,8 +16,8 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@WebServlet(name = "EmailSend", value = "/emailSend")
-public class EmailSend extends HttpServlet {
+@WebServlet(name = "EmailSendUpdatePassword", value = "/emailSendUpdatePassword")
+public class EmailSendUpdatePassword extends HttpServlet {
 
     private static final String EMAIL_REGEX =
             "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
@@ -27,7 +27,7 @@ public class EmailSend extends HttpServlet {
 
     private final UserInfoService userInfoService;
 
-    public EmailSend(UserInfoService userInfoService) {
+    public EmailSendUpdatePassword(UserInfoService userInfoService) {
         this.userInfoService = userInfoService;
     }
 
@@ -41,23 +41,24 @@ public class EmailSend extends HttpServlet {
         String email = req.getParameter("email");
 
         req.getSession().setAttribute("invalidEmail", null);
-        req.getSession().setAttribute("alreadyEmail", null);
+        req.getSession().setAttribute("notFoundEmail", null);
 
         //이메일 패턴이 아니거나 이메일 주소가 말도 안되게 길 때 다시 작성하게 보내기
         if (!isValidEmail(email) || email.length() > 320) {
             req.getSession().setAttribute("email", email);
             req.getSession().setAttribute("invalidEmail", true);
-            resp.sendRedirect("/basic/register.jsp");
+            resp.sendRedirect("/basic/findAccount.jsp");
             return;
         }
 
         //이미 있는 이메일인지 확인 하는 코드 부분
-        if (userInfoService.isEmailExists(email)) {
+        if (!userInfoService.isEmailExists(email)) {
             req.getSession().setAttribute("email", email);
-            req.getSession().setAttribute("alreadyEmail", true);
-            resp.sendRedirect("/basic/register.jsp");
+            req.getSession().setAttribute("notFoundEmail", true);
+            resp.sendRedirect("/basic/findAccount.jsp");
             return;
         }
+
         Random random = new Random();
         int code = random.nextInt(900000) + 100000;
 
@@ -84,7 +85,7 @@ public class EmailSend extends HttpServlet {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("projecthyunsuck@gmail.com", "취업완 모의면접 인증코드 발신용"));  // 발신자 설정
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));  // 수신자 설정
-            message.setSubject("취업완 회원가입 인증코드를 전송해드립니다.");  // 제목 설정
+            message.setSubject("취업완 비밀번호 수정 인증코드를 전송해드립니다.");  // 제목 설정
 
             // HTML 내용 생성
             String htmlContent = "<h1>취업완 (모의면접) 인증 코드</h1>"
@@ -102,6 +103,6 @@ public class EmailSend extends HttpServlet {
 
         req.getSession().setAttribute("email", email);
         req.getSession().setAttribute("code", code);
-        resp.sendRedirect("/basic/register.jsp");
+        resp.sendRedirect("/basic/findAccount.jsp");
     }
 }
