@@ -72,7 +72,7 @@
 
             <br>
             <div class="col-3 col-12-xsmall">
-                <input type="submit" value="Send Message" class="primary" />
+                <input type="submit" value="Send Message" class="primary" id="submitBtn"/>
             </div>
 
         </form>
@@ -179,7 +179,11 @@
 <script src="../basic/assets/js/breakpoints.min.js"></script>
 <script src="../basic/assets/js/util.js"></script>
 <script src="../basic/assets/js/main.js"></script>
-
+<script>
+    document.querySelector('form').addEventListener('submit', function() {
+        document.getElementById('submitBtn').disabled = true;
+    });
+</script>
 
 </body>
 </html>

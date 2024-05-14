@@ -11,14 +11,23 @@ import jakarta.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 @WebServlet(name = "GPTCall", value = "/GPTCall")
 public class GPTCall extends HttpServlet {
     @Autowired
     CustomBotController customBotController;
+
+    private HashMap<String, Integer> ipMap = new HashMap<>();
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void resetIpMap() {
+        ipMap.clear();
+    }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -26,6 +35,17 @@ public class GPTCall extends HttpServlet {
         res.setHeader("Content-Type", "text/plain;charset=utf-8");
         res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // cache 무효화
         PrintWriter writer = res.getWriter();
+
+        String ipAddress = req.getRemoteAddr();
+        Integer useCount = ipMap.get(ipAddress);
+        if (useCount == null) {
+            ipMap.put(ipAddress, 0);
+        } else {
+            if (useCount >= 5) {
+                //메인으로 이동하는 인덱스
+            }
+        }
+
 
         //받는 파라미터 변수에 저장
         String email = req.getParameter("email");
@@ -71,38 +91,43 @@ public class GPTCall extends HttpServlet {
         ChatGPTResponse gptResponse = customBotController.chat(prompt);
         log(gptResponse.getChoices().get(0).getMessage().getContent());
 
-        //임시 웹
-        res.setContentType("text/html; charset=utf-8");
-        writer.println("<h2> 질문 응답 </h2>");
-        if (email != null) writer.println("<form method=\"post\" action=\"http://localhost:8080/save/questions\">");
+        ipMap.put(ipAddress, ipMap.get(ipAddress) + 1);
+
 
         String s = gptResponse.getChoices().get(0).getMessage().getContent();
 
         //웹에 보내기 테스트
         JSONObject sendJson = new JSONObject(s);
         String[] questions = new String[count];
+        String[] answers = new String[count];
         for (int i = 1; i <= count; i++) questions[i - 1] = sendJson.getString("Question " + i);
         req.setAttribute("questions", questions);
-        req.setAttribute("email", email);
         req.setAttribute("keyword", keyword);
+        req.setAttribute("answers", answers);
+        req.setAttribute("index", 0);
         //여기에 페이지로 이동하는거
+        res.sendRedirect("/basic/showQuestions.jsp");
 
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(s);
-            for (int i = 1; i <= count; i++) {
-                writer.println("<h3> Question " + i + " : " + jsonObject.getString("Question " + i) + "</h3>");
-                if (email != null) writer.println("<input type=\"text\" name=\"answers" + i + "\" size=\"10\"> <br>");
-            }
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-        if (email != null) {
-            writer.println("<input type=\"hidden\" name=\"email\" value=\"" + email + "\">");
-            writer.println("<input type=\"hidden\" name=\"keyword\" value=\"" + keyword + "\">");
-            for (int i = 1; i <= count; i++) writer.println("<input type=\"hidden\" name=\"question" + i + "\" value=\"" + jsonObject.getString("Question " + i) + "\">");
-            writer.println("<input type=\"submit\" value=\"Submit\">");
-            writer.println("</form>");
-        }
+//        //임시 웹
+//        res.setContentType("text/html; charset=utf-8");
+//        writer.println("<h2> 질문 응답 </h2>");
+//        if (email != null) writer.println("<form method=\"post\" action=\"http://localhost:8080/save/questions\">");
+//        JSONObject jsonObject = null;
+//        try {
+//            jsonObject = new JSONObject(s);
+//            for (int i = 1; i <= count; i++) {
+//                writer.println("<h3> Question " + i + " : " + jsonObject.getString("Question " + i) + "</h3>");
+//                if (email != null) writer.println("<input type=\"text\" name=\"answers" + i + "\" size=\"10\"> <br>");
+//            }
+//        } catch (JSONException e) {
+//            throw new RuntimeException(e);
+//        }
+//        if (email != null) {
+//            writer.println("<input type=\"hidden\" name=\"email\" value=\"" + email + "\">");
+//            writer.println("<input type=\"hidden\" name=\"keyword\" value=\"" + keyword + "\">");
+//            for (int i = 1; i <= count; i++) writer.println("<input type=\"hidden\" name=\"question" + i + "\" value=\"" + jsonObject.getString("Question " + i) + "\">");
+//            writer.println("<input type=\"submit\" value=\"Submit\">");
+//            writer.println("</form>");
+//        }
     }
 }

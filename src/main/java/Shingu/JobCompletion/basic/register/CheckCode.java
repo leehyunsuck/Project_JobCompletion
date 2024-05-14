@@ -1,4 +1,4 @@
-package Shingu.JobCompletion.basic;
+package Shingu.JobCompletion.basic.register;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
