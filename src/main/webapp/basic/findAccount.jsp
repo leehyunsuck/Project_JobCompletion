@@ -28,6 +28,13 @@
 <section id="banner">
     <div class="inner">
         <h2>회원정보 찾기</h2>
+        <%
+        String loginEmail = (String) session.getAttribute("loginEmail");
+        if (loginEmail != null) {
+            response.sendRedirect("/basic/index.jsp");
+            return;
+        }
+        %>
         <form method="post" action="">
 
             <div class="col-6 col-12-xsmall">

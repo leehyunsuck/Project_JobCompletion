@@ -36,7 +36,7 @@
             if (loginEmail == null) {
                 session.invalidate();
         %>
-        <form method="post" action="http://localhost:8080/login">
+        <form method="post" action="/login">
 
             <% if (notFoundEmail) { %>
             <p style="color: red;">등록되지 않은 이메일 입니다.</p>
@@ -58,7 +58,10 @@
             </div>
 
         </form>
-        <% } %>
+        <% } else {
+                response.sendRedirect("/basic/index.jsp");
+                return;
+        }%>
         <a href="register.jsp">회원가입</a>
         <a href="findAccount.jsp">회원정보 찾기</a>
     </div>

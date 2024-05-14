@@ -32,7 +32,7 @@
         <%
             String loginEmail = (String) session.getAttribute("loginEmail");
             if (loginEmail != null) {
-                response.sendRedirect("http://localhost:8080/basic/index.jsp");
+                response.sendRedirect("/basic/index.jsp");
                 return;
             }
             String email = (String) request.getSession().getAttribute("email");
@@ -48,7 +48,7 @@
 
         <%-- 인증 완료 후 폼--%>
         <% if (check) { %>
-        <form method="post" action="http://localhost:8080/register">
+        <form method="post" action="/register">
             <div class="col-6 col-12-xsmall">
                 <input type="email" name="email" value="<%=email%>" readonly/>
             </div>
@@ -75,7 +75,7 @@
 
         <%-- 이메일 작성 후 코드 전송 --%>
         <% if (code == null || alreadyEmail) { %>
-        <form method="post" action="http://localhost:8080/emailSend">
+        <form method="post" action="/emailSend">
             <% if (invalidEmail) { %>
             <p style="color: red;">유효하지 않은 이메일 주소입니다</p>
             <% } %>
@@ -88,7 +88,7 @@
 
         <%-- 인증번호 확인하는 폼 --%>
         <% } else { %>
-        <form method="post" action="http://localhost:8080/checkCode">
+        <form method="post" action="/checkCode">
             <% if (invalidCode) { %>
             <p style="color: red;">유효하지 않은 인증번호 입니다.</p>
             <% } else { %>
@@ -102,7 +102,7 @@
         </form>
         <% }} %>
 
-        <a href="basic/login.jsp">로그인</a>
+        <a href="login.jsp">로그인</a>
         <a href="findAccount.jsp">회원정보 찾기</a>
     </div>
 

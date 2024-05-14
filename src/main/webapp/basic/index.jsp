@@ -36,7 +36,7 @@
 <section id="banner">
     <div class="inner">
         <h2>취업완</h2>
-        <form method="post" action="http://localhost:8080/GPTCall">
+        <form method="post" action="/GPTCall">
             <div class="col-3 col-12-xsmall">
                 <a>면접 질문 개수</a>
                 <select name="count">
