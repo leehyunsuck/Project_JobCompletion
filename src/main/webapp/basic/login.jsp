@@ -30,15 +30,17 @@
         <h2>로그인</h2>
         <%
             String loginEmail = (String) session.getAttribute("loginEmail");
+            boolean notFoundEmail = session.getAttribute("notFoundEmail") != null;
+            boolean wrongPassword = session.getAttribute("wrongPassword") != null;
+
             if (loginEmail == null) {
                 session.invalidate();
         %>
         <form method="post" action="http://localhost:8080/login">
 
             <div class="col-9 col-12-xsmall">
-                <input type="text" name="id" value="" placeholder="아이디 입력란" />
+                <input type="text" name="id" value="" placeholder="이메일 입력란" />
             </div>
-
 
             <div class="col-9 col-12-xsmall">
                 <input type="text" name="password" value="" placeholder="패스워드 입력란" />

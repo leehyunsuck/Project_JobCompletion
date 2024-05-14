@@ -40,8 +40,8 @@ public class EmailSend extends HttpServlet {
 //        super.service(req, resp);
         String email = req.getParameter("email");
 
-        req.getSession().setAttribute("invalidEmail", false);
-        req.getSession().setAttribute("alreadyEmail", false);
+        req.getSession().setAttribute("invalidEmail", null);
+        req.getSession().setAttribute("alreadyEmail", null);
 
         //이메일 패턴이 아니거나 이메일 주소가 말도 안되게 길 때 다시 작성하게 보내기
         if (!isValidEmail(email) || email.length() > 320) {

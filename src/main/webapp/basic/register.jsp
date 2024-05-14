@@ -33,21 +33,17 @@
             String loginEmail = (String) session.getAttribute("loginEmail");
             if (loginEmail != null) {
                 response.sendRedirect("http://localhost:8080/basic/index.jsp");
+                return;
             }
             String email = (String) request.getSession().getAttribute("email");
             Integer code = (Integer) request.getSession().getAttribute("code");
-            Boolean invalidEmail = (Boolean) request.getSession().getAttribute("invalidEmail");
-            Boolean invalidCode = (Boolean) request.getSession().getAttribute("invalidCode");
-            Boolean check = (Boolean) request.getSession().getAttribute("check");
-            Boolean alreadyEmail = (Boolean) request.getSession().getAttribute("alreadyEmail");
-            Boolean notEqualsPassword = (Boolean) request.getSession().getAttribute("notEqualsPassword");
-            Boolean passwordLength = (Boolean) request.getSession().getAttribute("passwordLength");
-            if (invalidEmail == null) invalidEmail = false;
-            if (invalidCode == null) invalidCode = false;
-            if (check == null) check = false;
-            if (alreadyEmail == null) alreadyEmail = false;
-            if (notEqualsPassword == null) notEqualsPassword = false;
-            if (passwordLength == null) passwordLength = false;
+
+            boolean invalidEmail = request.getSession().getAttribute("invalidEmail") != null;
+            boolean invalidCode = request.getSession().getAttribute("invalidCode") != null;
+            boolean check = request.getSession().getAttribute("check") != null;
+            boolean alreadyEmail = request.getSession().getAttribute("alreadyEmail") != null;
+            boolean notEqualsPassword = request.getSession().getAttribute("notEqualsPassword") != null;
+            boolean passwordLength = request.getSession().getAttribute("passwordLength") != null;
         %>
 
         <%-- 인증 완료 후 폼--%>

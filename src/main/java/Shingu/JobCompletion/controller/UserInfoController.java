@@ -29,8 +29,8 @@ public class UserInfoController extends HttpServlet {
         String password = req.getParameter("password");
         String checkPassword = req.getParameter("checkPassword");
 
-        req.getSession().setAttribute("passwordLength", false);
-        req.getSession().setAttribute("notEqualsPassword", false);
+        req.getSession().setAttribute("passwordLength", null);
+        req.getSession().setAttribute("notEqualsPassword", null);
 
         if (password.equals(checkPassword)) {
             //비밀번호 최대 최소 길이 설정
