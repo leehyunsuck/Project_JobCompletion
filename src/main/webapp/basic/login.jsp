@@ -38,8 +38,14 @@
         %>
         <form method="post" action="http://localhost:8080/login">
 
+            <% if (notFoundEmail) { %>
+            <p style="color: red;">등록되지 않은 이메일 입니다.</p>
+            <% } %>
+            <% if (wrongPassword) { %>
+            <p style="color: red;">옳바르지 않은 비밀번호 입니다.</p>
+            <% } %>
             <div class="col-9 col-12-xsmall">
-                <input type="text" name="id" value="" placeholder="이메일 입력란" />
+                <input type="text" name="email" value="" placeholder="이메일 입력란" />
             </div>
 
             <div class="col-9 col-12-xsmall">

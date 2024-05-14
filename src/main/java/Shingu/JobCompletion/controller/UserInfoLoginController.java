@@ -24,7 +24,7 @@ public class UserInfoLoginController extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String email = (String) req.getSession().getAttribute("email");
+        String email = req.getParameter("email");
         String password = req.getParameter("password");
 
         String hashPassword = JobCompletionEncode.encode(email, password);
@@ -33,16 +33,24 @@ public class UserInfoLoginController extends HttpServlet {
         req.getSession().setAttribute("notFoundEmail", null);
         req.getSession().setAttribute("wrongPassword", null);
 
-        if (userInfoService.isAccountExists(email, hashPassword)) {
-            req.getSession().setAttribute("loginEmail", email);
-            resp.sendRedirect("localhost:8080/basic/index.jsp");
-        } else {
-            if (userInfoService.isEmailExists(email)) {
-                req.getSession().setAttribute("notFoundEmail", true);
-            } else {
-                req.getSession().setAttribute("wrongPassword", true);
-            }
-            resp.sendRedirect("localhost:8080/basic/login.jsp");
+        System.out.println(email);
+        System.out.println(password);
+        System.out.println(hashPassword);
+
+        if (!userInfoService.isEmailExists(email)) {
+            req.getSession().setAttribute("notFoundEmail", true);
+            resp.sendRedirect("/basic/login.jsp");
+            return;
         }
+
+        if (!userInfoService.isAccountExists(email, hashPassword)) {
+            req.getSession().setAttribute("wrongPassword", true);
+            resp.sendRedirect("/basic/login.jsp");
+            return;
+        }
+
+        System.out.println("로그인 성공");
+        req.getSession().setAttribute("loginEmail", email);
+        resp.sendRedirect("/basic/index.jsp");
     }
 }
