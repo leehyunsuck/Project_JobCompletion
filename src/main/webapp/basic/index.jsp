@@ -5,6 +5,11 @@
   Time: 오후 2:46
   To change this template use File | Settings | File Templates.
 --%>
+
+<%--
+여기 오면 이메일, 인덱스페이지 에러 메시지 외에는 세션 값 날리기
+--%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>

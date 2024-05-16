@@ -5,6 +5,13 @@
   Time: 오후 2:46
   To change this template use File | Settings | File Templates.
 --%>
+
+<%--
+다음에 할 것 -> 질문개수만큼 대답했으면 저장하는 폼 또는 피드백으로 옮겨야함 (안그럼 에러)
+
+비로그인 사용자는 다음질문 보여지게 바꾸기 (지금은 한번에 보여짐)
+--%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
@@ -22,53 +29,44 @@
 <header id="header">
     <a class="logo" href="index.jsp">취업완</a>
     <%
-        String loginEmail = (String) session.getAttribute("loginEmail");
-        if (loginEmail == null) {
-            session.invalidate();
+    String loginEmail, keyword;
+    String[] questions, answers;
+    int index;
+
+    try {
+        loginEmail = (String) session.getAttribute("loginEmail");
+
+        questions = (String[]) session.getAttribute("questions");
+        answers = (String[]) session.getAttribute("answers");
+        keyword = (String) session.getAttribute("keyword");
+        index = (int) session.getAttribute("index");
+    } catch (Exception e) {
+        String temp = session.getAttribute("loginEmail") == null ? null : (String) session.getAttribute("loginEmail");
+        session.invalidate();
+        if (temp != null) session.setAttribute("loginEmail", temp);
+        response.sendRedirect("/basic/index.jsp");
+        return;
+    }
+
+    String action = request.getParameter("action");
+    String inputAnswer = request.getParameter("inputAnswer");
+
+    if ("increase".equals(action)) {
+        answers[index] = inputAnswer;
+        index++;
+
+        session.setAttribute("index", index);
+        session.setAttribute("answers", answers);
+    }
+
+    if (loginEmail == null) {
+        String showKeyword = keyword.length() > 10 ? keyword.substring(0, 10) + "..." : keyword;
     %>
-    <a class="logo" href="login.jsp">로그인</a>
+    <p style="color: white;">키워드 : <%=keyword%></p>
     <% } else { %>
-    <p style="color: white;"><%=loginEmail%> 님 환영합니다.</p>
+        <p style="color: white;"><%=loginEmail%>님 환영합니다.</p>
     <% } %>
 </header>
-
-<%--<div class="w-4/5 mx-auto bg-white dark:bg-zinc-800 shadow-md rounded-lg overflow-hidden">--%>
-<%--    <div class="flex flex-col h-[400px]">--%>
-<%--        <div class="px-4 py-3 border-b dark:border-zinc-700">--%>
-<%--            <div class="flex justify-between items-center">--%>
-<%--                <h2 class="text-lg font-semibold text-zinc-800 dark:text-white">--%>
-<%--                    모의 면접--%>
-<%--                </h2>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-<%--        <div class="flex-1 p-3 overflow-y-auto flex flex-col space-y-2" id="chatDisplay">--%>
-<%--            <div class="chat-message self-end bg-blue-500 text-white max-w-xs rounded-lg px-3 py-1.5 text-sm">--%>
-<%--                안녕하세요! 오늘 어떻게 도와드릴까요?--%>
-<%--            </div>--%>
-<%--            <div class="chat-message self-start bg-zinc-500 text-white max-w-xs rounded-lg px-3 py-1.5 text-sm">--%>
-<%--                안녕하세요! 챗봇이 필요해요!--%>
-<%--            </div>--%>
-<%--        </div>--%>
-
-
-<%--        <div class="px-3 py-2 border-t dark:border-zinc-700">--%>
-<%--            <div class="flex gap-2">--%>
-<%--                <input--%>
-<%--                        placeholder="메시지를 입력하세요..."--%>
-<%--                        class="flex-1 p-2 border rounded-lg dark:bg-zinc-700 dark:text-white dark:border-zinc-600 text-sm"--%>
-<%--                        id="chatInput"--%>
-<%--                        type="text"--%>
-<%--                />--%>
-<%--                <button--%>
-<%--                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1.5 px-3 rounded-lg transition duration-300 ease-in-out text-sm"--%>
-<%--                        id="sendButton"--%>
-<%--                >--%>
-<%--                    보내기--%>
-<%--                </button>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-<%--    </div>--%>
-<%--</div>--%>
 
 <div style="width: 80%; margin: auto; background-color: #171c24; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15); border-radius: 10px; overflow: hidden;">
     <div style="display: flex; flex-direction: column; height: 80%;">
@@ -80,22 +78,36 @@
             </div>
         </div>
         <div style="flex: 1; height: 80%; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;" id="chatDisplay">
-            <div style="align-self: flex-start; background-color: #717171; color: white; max-width: 20rem; border-radius: 10px; padding: 12px 16px; font-size: 0.875rem;">
-                질문
-            </div>
-            <div style="align-self: flex-end; background-color: #007bff; color: white; max-width: 20rem; border-radius: 10px; padding: 12px 16px; font-size: 0.875rem;">
-                대답
-            </div>
+            <%-- 로그인 한 사용자 아니면 질문만 다 보여주기 --%>
+            <% if (loginEmail == null) {
+                for (String question : questions) { %>
+                    <div style="align-self: flex-start; background-color: #717171; color: white; max-width: 20rem; border-radius: 10px; padding: 12px 16px; font-size: 0.875rem;">
+                        <%=question%>
+                    </div>
+                <% } %>
+            <% } else {
+                for (int i = 0; i < questions.length; i++) {
+            %>
+                    <div style="align-self: flex-start; background-color: #717171; color: white; max-width: 20rem; border-radius: 10px; padding: 12px 16px; font-size: 0.875rem;">
+                        <%=questions[i]%>
+                    </div>
+                    <%
+                    if (i == index) break;
+                    %>
+                    <div style="align-self: flex-end; background-color: #007bff; color: white; max-width: 20rem; border-radius: 10px; padding: 12px 16px; font-size: 0.875rem;">
+                        <%=answers[i]%>
+                    </div>
+                <% } %>
+            <% } %>
         </div>
         <div style="padding: 16px; border-top: 1px solid #ccc;">
-            <form method="POST" action="/"  style="display: flex; gap: 8px;">
-                <input
-                        placeholder="메시지를 입력하세요..."
-                        style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 10px; font-size: 0.875rem;"
-                        id="chatInput"
-                        type="text"
-                        name="answer"
-                />
+            <form method="POST" style="display: flex; gap: 8px;">
+                <input type="hidden" name="action" value="increase">
+                <input placeholder="메시지를 입력하세요..."
+                       style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 10px; font-size: 0.875rem;"
+                       id="chatInput"
+                       type="text"
+                       name="inputAnswer"/>
                 <input type="submit" value="전송" class="primary" id="submitBtn"/>
             </form>
         </div>
@@ -128,6 +140,9 @@
     document.querySelector('form').addEventListener('submit', function() {
         document.getElementById('submitBtn').disabled = true;
     });
+
+    var div = document.getElementById('chatDisplay');
+    div.scrollTop = div.scrollHeight;
 </script>
 
 </body>

@@ -2,19 +2,18 @@ package Shingu.JobCompletion.basic;
 
 import Shingu.JobCompletion.controller.CustomBotController;
 import Shingu.JobCompletion.dto.ChatGPTResponse;
+import Shingu.JobCompletion.tool.GetClientIP;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 
 @WebServlet(name = "GPTCall", value = "/GPTCall")
@@ -24,6 +23,7 @@ public class GPTCall extends HttpServlet {
 
     private HashMap<String, Integer> ipMap = new HashMap<>();
 
+    //00시 지나면 Map 초기화
     @Scheduled(cron = "0 0 0 * * ?")
     public void resetIpMap() {
         ipMap.clear();
@@ -31,36 +31,33 @@ public class GPTCall extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        res.setStatus(HttpServletResponse.SC_OK);
-        res.setHeader("Content-Type", "text/plain;charset=utf-8");
-        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // cache 무효화
-        PrintWriter writer = res.getWriter();
-
-        String ipAddress = req.getRemoteAddr();
-        Integer useCount = ipMap.get(ipAddress);
-        if (useCount == null) {
-            ipMap.put(ipAddress, 0);
-        } else {
-            if (useCount >= 5) {
-                //메인으로 이동하는 인덱스
-            }
-        }
-
 
         //받는 파라미터 변수에 저장
-        String email = req.getParameter("email");
         String keyword = req.getParameter("keyword");
         Integer count = Integer.parseInt(req.getParameter("count"));
         String lang = req.getParameter("lang");
         String notQuestion = req.getParameter("notQuestion").isEmpty() ? "" : req.getParameter("notQuestion");
         Boolean diff = req.getParameterMap().containsKey("diff") && req.getParameter("diff").equals("true");
 
+        HttpSession session = req.getSession();
         if (keyword.isEmpty()) {
-            HttpSession session = req.getSession();
-            session.setAttribute("error", "키워드를 입력하세요");
+            session.setAttribute("mainErrorMsg", "키워드를 입력하지 않았습니다.");
+            res.sendRedirect("basic/index.jsp");
+            return;
+        } else if (keyword.length() > 30) {
+            session.setAttribute("mainErrorMsg", "키워드의 길이는 30 이하로 입력해주세요");
             res.sendRedirect("basic/index.jsp");
             return;
         }
+
+        //IP
+        String ipAddress = GetClientIP.getClientIP(req);
+        Integer useCount = ipMap.containsKey(ipAddress) ? ipMap.get(ipAddress) : 1;
+
+        if (useCount > 5) {
+            //메인 이동
+        }
+
 
         //프롬프트에 받은 파라미터값 넣기
         String prompt = """
@@ -93,41 +90,21 @@ public class GPTCall extends HttpServlet {
 
         ipMap.put(ipAddress, ipMap.get(ipAddress) + 1);
 
-
         String s = gptResponse.getChoices().get(0).getMessage().getContent();
 
         //웹에 보내기 테스트
         JSONObject sendJson = new JSONObject(s);
         String[] questions = new String[count];
         String[] answers = new String[count];
-        for (int i = 1; i <= count; i++) questions[i - 1] = sendJson.getString("Question " + i);
-        req.setAttribute("questions", questions);
-        req.setAttribute("keyword", keyword);
-        req.setAttribute("answers", answers);
-        req.setAttribute("index", 0);
-        //여기에 페이지로 이동하는거
+        for (int i = 1; i <= count; i++)
+            questions[i - 1] = sendJson.getString("Question " + i);
+
+        session.setAttribute("questions", questions);
+        session.setAttribute("keyword", keyword);
+        session.setAttribute("answers", answers);
+        session.setAttribute("index", 0);
+
         res.sendRedirect("/basic/showQuestions.jsp");
 
-//        //임시 웹
-//        res.setContentType("text/html; charset=utf-8");
-//        writer.println("<h2> 질문 응답 </h2>");
-//        if (email != null) writer.println("<form method=\"post\" action=\"http://localhost:8080/save/questions\">");
-//        JSONObject jsonObject = null;
-//        try {
-//            jsonObject = new JSONObject(s);
-//            for (int i = 1; i <= count; i++) {
-//                writer.println("<h3> Question " + i + " : " + jsonObject.getString("Question " + i) + "</h3>");
-//                if (email != null) writer.println("<input type=\"text\" name=\"answers" + i + "\" size=\"10\"> <br>");
-//            }
-//        } catch (JSONException e) {
-//            throw new RuntimeException(e);
-//        }
-//        if (email != null) {
-//            writer.println("<input type=\"hidden\" name=\"email\" value=\"" + email + "\">");
-//            writer.println("<input type=\"hidden\" name=\"keyword\" value=\"" + keyword + "\">");
-//            for (int i = 1; i <= count; i++) writer.println("<input type=\"hidden\" name=\"question" + i + "\" value=\"" + jsonObject.getString("Question " + i) + "\">");
-//            writer.println("<input type=\"submit\" value=\"Submit\">");
-//            writer.println("</form>");
-//        }
     }
 }

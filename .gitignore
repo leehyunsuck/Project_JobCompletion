@@ -39,3 +39,6 @@ out/
 # Ignore specific Java file
 /src/main/java/Shingu/JobCompletion/tool/*
 
+# AdminTestPage
+/src/main/webapp/WEB-INF/admin/*
+
