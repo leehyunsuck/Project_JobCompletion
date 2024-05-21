@@ -52,10 +52,11 @@ public class GPTCall extends HttpServlet {
 
         //IP
         String ipAddress = GetClientIP.getClientIP(req);
-        Integer useCount = ipMap.containsKey(ipAddress) ? ipMap.get(ipAddress) : 1;
+        Integer useCount = ipMap.containsKey(ipAddress) ? ipMap.get(ipAddress) : 0;
+        if (useCount == 0) ipMap.put(ipAddress, useCount);
 
         if (useCount > 5) {
-            //메인 이동
+            System.out.println(ipAddress + "사용자가 5번 넘게 사용함");
         }
 
 
@@ -105,6 +106,5 @@ public class GPTCall extends HttpServlet {
         session.setAttribute("index", 0);
 
         res.sendRedirect("/basic/showQuestions.jsp");
-
     }
 }

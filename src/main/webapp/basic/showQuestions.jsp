@@ -79,13 +79,13 @@
         </div>
         <div style="flex: 1; height: 80%; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;" id="chatDisplay">
             <%-- 로그인 한 사용자 아니면 질문만 다 보여주기 --%>
-            <% if (loginEmail == null) {
+        <%  if (loginEmail == null) {
                 for (String question : questions) { %>
                     <div style="align-self: flex-start; background-color: #717171; color: white; max-width: 20rem; border-radius: 10px; padding: 12px 16px; font-size: 0.875rem;">
                         <%=question%>
                     </div>
-                <% } %>
-            <% } else {
+            <%
+            }} else {
                 for (int i = 0; i < questions.length; i++) {
             %>
                     <div style="align-self: flex-start; background-color: #717171; color: white; max-width: 20rem; border-radius: 10px; padding: 12px 16px; font-size: 0.875rem;">
@@ -97,19 +97,37 @@
                     <div style="align-self: flex-end; background-color: #007bff; color: white; max-width: 20rem; border-radius: 10px; padding: 12px 16px; font-size: 0.875rem;">
                         <%=answers[i]%>
                     </div>
-                <% } %>
-            <% } %>
+            <%
+            }}
+            %>
         </div>
         <div style="padding: 16px; border-top: 1px solid #ccc;">
-            <form method="POST" style="display: flex; gap: 8px;">
-                <input type="hidden" name="action" value="increase">
-                <input placeholder="메시지를 입력하세요..."
+            <%
+            if (answers[answers.length-1] == null) {
+            %>
+                <form method="POST" style="display: flex; gap: 8px;">
+                    <input type="hidden" name="action" value="increase">
+                    <input placeholder="메시지를 입력하세요..."
                        style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 10px; font-size: 0.875rem;"
                        id="chatInput"
                        type="text"
                        name="inputAnswer"/>
-                <input type="submit" value="전송" class="primary" id="submitBtn"/>
+                    <input type="submit" value="전송" class="primary" id="submitBtn"/>
+                </form>
+            <%
+            } else {
+            %>
+            <form method="POST" style="display: flex; gap: 8px;" action="/save/questions">
+                <input placeholder="답변하느라 고생하셨습니다. 저장 클릭시 피드백을 보여드리며, 데이터를 저장합니다"
+                       style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 10px; font-size: 0.875rem;"
+                       type="text"
+                       name="inputAnswer"
+                       readonly/>
+                <input type="submit" value="저장" class="primary"/>
             </form>
+            <%
+            }
+            %>
         </div>
     </div>
 </div>

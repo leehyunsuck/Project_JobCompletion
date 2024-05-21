@@ -27,14 +27,20 @@
 <header id="header">
     <a class="logo" href="index.jsp">취업완</a>
     <%
-        String loginEmail = (String) session.getAttribute("loginEmail");
-        if (loginEmail == null) {
-            session.invalidate();
+    String loginEmail = (String) session.getAttribute("loginEmail");
+    session.invalidate();
+    session = request.getSession();
+    if (loginEmail == null) {
     %>
-    <a class="logo" href="login.jsp">로그인</a>
-    <% } else { %>
-    <p style="color: white;"><%=loginEmail%> 님 환영합니다.</p>
-    <% } %>
+        <a class="logo" href="login.jsp">로그인</a>
+    <%
+    } else {
+        session.setAttribute("loginEmail", loginEmail);
+    %>
+        <p style="color: white;"><%=loginEmail%> 님 환영합니다.</p>
+    <%
+    }
+    %>
 </header>
 
 <!-- Banner -->
