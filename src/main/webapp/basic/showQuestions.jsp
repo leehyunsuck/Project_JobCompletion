@@ -5,13 +5,6 @@
   Time: 오후 2:46
   To change this template use File | Settings | File Templates.
 --%>
-
-<%--
-다음에 할 것 -> 질문개수만큼 대답했으면 저장하는 폼 또는 피드백으로 옮겨야함 (안그럼 에러)
-
-비로그인 사용자는 다음질문 보여지게 바꾸기 (지금은 한번에 보여짐)
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
@@ -43,6 +36,7 @@
     } catch (Exception e) {
         String temp = session.getAttribute("loginEmail") == null ? null : (String) session.getAttribute("loginEmail");
         session.invalidate();
+        session = request.getSession();
         if (temp != null) session.setAttribute("loginEmail", temp);
         response.sendRedirect("/basic/index.jsp");
         return;
@@ -132,7 +126,8 @@
             <%
             } else {
             %>
-                <form method="POST" style="display: flex; gap: 8px;" action="/save/questions">
+<%--                /save/questions 대신에 테스트로 이거 넣음 GPTFeedBack--%>
+                <form method="POST" style="display: flex; gap: 8px;" action="/GPTFeedBack">
                     <input placeholder="답변하느라 고생하셨습니다. 저장 클릭시 피드백을 보여드리며, 데이터를 저장합니다"
                        style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 10px; font-size: 0.875rem;"
                        type="text"
@@ -177,6 +172,10 @@
 
     var div = document.getElementById('chatDisplay');
     div.scrollTop = div.scrollHeight;
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('chatInput').focus();
+    });
 </script>
 
 </body>

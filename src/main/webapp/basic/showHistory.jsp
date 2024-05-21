@@ -40,7 +40,7 @@
     } else {
         session.setAttribute("loginEmail", loginEmail);
     %>
-        <a class="logo" href="showHistory.jsp"><%=loginEmail%> 님 환영합니다.</a>
+        <a class="logo" href="history.jsp"><%=loginEmail%> 님 환영합니다.</a>
     <%
     }
     %>

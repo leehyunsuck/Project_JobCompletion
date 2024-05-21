@@ -23,16 +23,13 @@ public class QuestionsController {
     @Autowired
     private QuestionsRepository questionsRepository;
 
-    @GetMapping("/save/questions")
-    public ResponseEntity<?> handleGetRequest() {
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/basic/index.jsp")).build();
-    }
-
+    @GetMapping(path = "/save/questions")
     @PostMapping(path = "/save/questions", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<?> createQuestions(@ModelAttribute QuestionsForm form, HttpSession session) throws Exception {
         String loginEmail = (String) session.getAttribute("loginEmail");
         String[] questions = (String[]) session.getAttribute("questions");
         String[] answers = (String[]) session.getAttribute("answers");
+        String[] feedbakcs = (String[]) session.getAttribute("feedbacks");
 
         String keyword = (String) session.getAttribute("keyword");
 
@@ -45,16 +42,20 @@ public class QuestionsController {
         for (int i = 0; i < questions.length; i++) {
             String questionMethodName = "setQuestion" + (i + 1);
             String answerMethodName = "setAnswers" + (i + 1);
+            String feedbackMethodName = "setFeedback" + (i + 1);
 
             Method questionMethod = form.getClass().getMethod(questionMethodName, String.class);
             Method answerMethod = form.getClass().getMethod(answerMethodName, String.class);
+            Method feedbackMethod = form.getClass().getMethod(feedbackMethodName, String.class);
 
             questionMethod.invoke(form, questions[i]);
             answerMethod.invoke(form, answers[i]);
+            feedbackMethod.invoke(form, feedbakcs[i]);
         }
 
         Questions questionsEntity = form.toEntity();
         questionsRepository.save(questionsEntity);
-        return ResponseEntity.ok().body("Questions saved successfully");
+
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/basic/showResult.jsp")).build();
     }
 }

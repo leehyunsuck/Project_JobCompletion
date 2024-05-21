@@ -32,6 +32,11 @@ public class GPTCall extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
+        String temp = req.getParameter("count");
+        if (temp == null) {
+            res.sendRedirect("basic/index.jsp");
+            return;
+        }
         //받는 파라미터 변수에 저장
         String keyword = req.getParameter("keyword");
         Integer count = Integer.parseInt(req.getParameter("count"));
@@ -46,6 +51,10 @@ public class GPTCall extends HttpServlet {
             return;
         } else if (keyword.length() > 30) {
             session.setAttribute("mainErrorMsg", "키워드의 길이는 30 이하로 입력해주세요");
+            res.sendRedirect("basic/index.jsp");
+            return;
+        } else if (notQuestion.length() > 100) {
+            session.setAttribute("notQuestionsErrorMsg", "받지 않을 키워드 길이는 100 이하로 입력해주세요");
             res.sendRedirect("basic/index.jsp");
             return;
         }
@@ -104,6 +113,7 @@ public class GPTCall extends HttpServlet {
         session.setAttribute("keyword", keyword);
         session.setAttribute("answers", answers);
         session.setAttribute("index", 0);
+        session.setAttribute("lang", lang);
 
         res.sendRedirect("/basic/showQuestions.jsp");
     }
