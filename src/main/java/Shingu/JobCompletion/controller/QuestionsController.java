@@ -7,54 +7,26 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import java.net.URI;
+
 
 import java.lang.reflect.Method;
-
-//@RestController
-//public class QuestionsController {
-//
-//    @Autowired
-//    private QuestionsRepository questionsRepository;
-//
-//    @PostMapping(path = "/save/questions", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-//    public ResponseEntity<?> createQuestions(@ModelAttribute QuestionsForm form) {
-//        Questions questions = form.toEntity();
-//
-//        String q1 = form.getQuestion1();
-//        String q2 = form.getQuestion2();
-//        String q3 = form.getQuestion3();
-//        String q4 = form.getQuestion4();
-//        String q5 = form.getQuestion5();
-//        String q6 = form.getQuestion6();
-//        String q7 = form.getQuestion7();
-//        String q8 = form.getQuestion8();
-//        String q9 = form.getQuestion9();
-//        String q10 = form.getQuestion10();
-//
-//        String a1 = form.getAnswers1();
-//        String a2 = form.getAnswers2();
-//        String a3 = form.getAnswers3();
-//        String a4 = form.getAnswers4();
-//        String a5 = form.getAnswers5();
-//        String a6 = form.getAnswers6();
-//        String a7 = form.getAnswers7();
-//        String a8 = form.getAnswers8();
-//        String a9 = form.getAnswers9();
-//        String a10 = form.getAnswers10();
-//
-//        questionsRepository.save(questions);
-//        return ResponseEntity.ok().body("Questions saved successfully");
-//    }
-//}
 
 @RestController
 public class QuestionsController {
 
     @Autowired
     private QuestionsRepository questionsRepository;
+
+    @GetMapping("/save/questions")
+    public ResponseEntity<?> handleGetRequest() {
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/basic/index.jsp")).build();
+    }
 
     @PostMapping(path = "/save/questions", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<?> createQuestions(@ModelAttribute QuestionsForm form, HttpSession session) throws Exception {
@@ -63,6 +35,10 @@ public class QuestionsController {
         String[] answers = (String[]) session.getAttribute("answers");
 
         String keyword = (String) session.getAttribute("keyword");
+
+        if (loginEmail == null || keyword == null || questions[0] == null) {
+            return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/basic/index.jsp")).build();
+        }
 
         form.setKeyword(keyword);
         form.setEmail(loginEmail);
