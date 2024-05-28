@@ -29,7 +29,7 @@ public class GPTFeedBack extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-        String temp = (String) req.getSession().getAttribute("questions");
+        String temp = (String) req.getSession().getAttribute("lang");
         if (temp == null) {
             res.sendRedirect("/basic/index.jsp");
             return;
@@ -62,8 +62,15 @@ public class GPTFeedBack extends HttpServlet {
         JSONObject sendJson = new JSONObject(s);
         String[] feedbacks = new String[questions.length];
 
-        for (int i = 1; i <= questions.length; i++)
-            feedbacks[i - 1] = sendJson.getString("Feedback " + i);
+        for (int i = 1; i <= questions.length; i++) {
+            String feedbackKey = "Feedback " + i;
+            if (sendJson.has(feedbackKey)) {
+                feedbacks[i - 1] = sendJson.getString(feedbackKey);
+            } else {
+                feedbacks[i - 1] = sendJson.getString(String.valueOf(i));  // i 값을 문자열로 변환하여 할당
+            }
+        }
+
 
         req.getSession().setAttribute("feedbacks", feedbacks);
 

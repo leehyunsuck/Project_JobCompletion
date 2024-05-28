@@ -106,8 +106,17 @@ public class GPTCall extends HttpServlet {
         JSONObject sendJson = new JSONObject(s);
         String[] questions = new String[count];
         String[] answers = new String[count];
-        for (int i = 1; i <= count; i++)
-            questions[i - 1] = sendJson.getString("Question " + i);
+
+        for (int i = 1; i <= count; i++) {
+            String questionKey = "Question " + i;
+            if (sendJson.has(questionKey)) {
+                questions[i - 1] = sendJson.getString(questionKey);
+            } else {
+                questions[i - 1] = sendJson.getString(String.valueOf(i));  // i 값을 문자열로 변환하여 할당
+            }
+        }
+
+
 
         session.setAttribute("questions", questions);
         session.setAttribute("keyword", keyword);
