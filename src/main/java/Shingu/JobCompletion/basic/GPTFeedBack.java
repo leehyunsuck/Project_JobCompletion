@@ -44,6 +44,7 @@ public class GPTFeedBack extends HttpServlet {
         First the questions are [질문] and the answers are [대답].
         The total number of questions must be as many as [개수] questions. 
         Look at the questions and answers above and give feedback.
+        Additionally, if there is a mistake, please let me know that it is incorrect and the correct information, and if it needs to be supplemented, let me know what needs to be supplemented.
         Give me the answer in [언어].
         The result is JSON format "Feedback Number": "feedback content" Move it like this!!
         """.replace("[개수]", questions.length + "")

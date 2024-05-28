@@ -64,8 +64,10 @@ public class GPTCall extends HttpServlet {
         Integer useCount = ipMap.containsKey(ipAddress) ? ipMap.get(ipAddress) : 0;
         if (useCount == 0) ipMap.put(ipAddress, useCount);
 
-        if (useCount > 5) {
+        if (useCount >= 5) {
+            res.sendRedirect("basic/index.jsp");
             System.out.println(ipAddress + "사용자가 5번 넘게 사용함");
+            return;
         }
 
 

@@ -87,6 +87,7 @@
             <div class="col-3 col-12-xsmall">
                 <input type="submit" value="Send Message" class="primary" id="submitBtn"/>
             </div>
+            <a>하루 5번만 질문 가능합니다</a>
 
         </form>
     </div>

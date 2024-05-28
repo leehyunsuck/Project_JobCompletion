@@ -1,23 +1,26 @@
-package Shingu.JobCompletion.basic;
+package Shingu.JobCompletion.controller;
 
 import Shingu.JobCompletion.entity.Questions;
 import Shingu.JobCompletion.repository.QuestionsRepository;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-@WebServlet(name = "ShowQuestions", value = "/show/history")
-public class ShowHistory extends HttpServlet {
+@Controller
+public class ShowHistoryController {
+
     @Autowired
     private QuestionsRepository questionsRepository;
 
-    public List<Questions> getQuestions(HttpSession session) {
+    @GetMapping("/show/history")
+    public String showHistory(HttpSession session, Model model) {
         String email = (String) session.getAttribute("loginEmail");
         List<Questions> history = questionsRepository.findByEmail(email);
-
-        return history;
+        model.addAttribute("history", history);
+        return "views/showHistory";
     }
 }
