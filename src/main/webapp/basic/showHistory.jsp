@@ -40,63 +40,11 @@
     } else {
         session.setAttribute("loginEmail", loginEmail);
     %>
-        <a class="logo" href="history.jsp"><%=loginEmail%> 님 환영합니다.</a>
+        <a class="logo" href="showHistory.jsp"><%=loginEmail%> 님 환영합니다.</a>
     <%
     }
     %>
 </header>
-
-<!-- Banner -->
-<section id="banner">
-    <div class="inner">
-        <%  if (loginEmail != null) { %>
-        <a style="display: block; text-align: right;">우측 상단 환영합니다. 클릭시 면접 질문 기록 확인, 로그아웃 가능</a>
-        <%  } %>
-        <h2>취업완</h2>
-        <form method="post" action="/GPTCall">
-            <div class="col-3 col-12-xsmall">
-                <a>면접 질문 개수</a>
-                <select name="count">
-                    <option value="3">3개</option>
-                    <option value="5">5개</option>
-                    <option value="7">7개</option>
-                    <option value="10">10개</option>
-                </select>
-            </div>
-            <div class="col-3 col-12-xsmall">
-                <a>언어</a>
-                <select name="lang">
-                    <option value="Korean">한글</option>
-                    <option value="English">English</option>
-                </select>
-            </div>
-            <div class="col-3 col-12-xsmall">
-                <a>난이도</a>
-                <select name="diff">
-                    <option value="false">normal</option>
-                    <option value="true">hard</option>
-                </select>
-            </div>
-
-            <div class="col-9 col-12-xsmall">
-                <% String tempKeyword = mainErrorMsg == null ? "제공받을 기술 면접의 기술 입력란 (자바, 포토샵 등)" : mainErrorMsg;%>
-                <input type="text" name="keyword" value="" placeholder="<%=tempKeyword%>" />
-            </div>
-
-            <div class="col-9 col-12-xsmall">
-                <% String tempNotQuestions = notQuestionsErrorMsg == null ? "받지않을 면접 질문 입력란 (빈칸 가능)" : notQuestionsErrorMsg;%>
-                <input type="text" name="notQuestion" value="" placeholder="<%=tempNotQuestions%>" />
-            </div>
-
-            <br>
-            <div class="col-3 col-12-xsmall">
-                <input type="submit" value="Send Message" class="primary" id="submitBtn"/>
-            </div>
-
-        </form>
-    </div>
-    <video autoplay loop muted playsinline src="../basic/images/banner.mp4"></video>
-</section>
 
 <!-- Highlights -->
 <section class="wrapper">

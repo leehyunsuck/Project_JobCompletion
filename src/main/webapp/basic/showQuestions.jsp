@@ -58,7 +58,7 @@
     %>
     <p style="color: white;">키워드 : <%=showKeyword%></p>
     <% } else { %>
-        <p style="color: white;"><%=loginEmail%>님 환영합니다.</p>
+        <a class="logo" href="/show/history"><%=loginEmail%> 님 환영합니다.</a>
     <% } %>
 </header>
 
@@ -133,7 +133,7 @@
                        type="text"
                        name="inputAnswer"
                        readonly/>
-                    <input type="submit" value="저장" class="primary"/>
+                    <input type="submit" value="저장" class="primary" id="submitBtnSave"/>
                 </form>
             <%
                 }
@@ -166,15 +166,23 @@
 <script src="../basic/assets/js/main.js"></script>
 <%--<script src="https://cdn.tailwindcss.com"></script>--%>
 <script>
-    document.querySelector('form').addEventListener('submit', function() {
-        document.getElementById('submitBtn').disabled = true;
+    document.querySelectorAll('form').forEach(function(form) {
+        form.addEventListener('submit', function() {
+            var submitButton = form.querySelector('input[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+        });
     });
 
     var div = document.getElementById('chatDisplay');
     div.scrollTop = div.scrollHeight;
 
     window.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('chatInput').focus();
+        var chatInput = document.getElementById('chatInput');
+        if (chatInput) {
+            chatInput.focus();
+        }
     });
 </script>
 
