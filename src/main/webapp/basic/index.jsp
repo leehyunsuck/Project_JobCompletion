@@ -22,9 +22,9 @@
 <header id="header">
     <a class="logo" href="index.jsp">취업완</a>
     <%
-    String loginEmail = (String) session.getAttribute("loginEmail");
-    String mainErrorMsg = (String) session.getAttribute("mainErrorMsg");
-    String notQuestionsErrorMsg = (String) session.getAttribute("notQuestionsErrorMsg");
+    String loginEmail = session.getAttribute("loginEmail") == null ? null : (String) session.getAttribute("loginEmail");
+    String mainErrorMsg = session.getAttribute("mainErrorMsg") == null ? null : (String) session.getAttribute("mainErrorMsg");
+    String notQuestionsErrorMsg = session.getAttribute("notQuestionsErrorMsg") == null ? null : (String) session.getAttribute("notQuestionsErrorMsg");
     session.invalidate();
     session = request.getSession();
 
@@ -87,7 +87,7 @@
             <div class="col-3 col-12-xsmall">
                 <input type="submit" value="Send Message" class="primary" id="submitBtn"/>
             </div>
-            <a>하루 5번만 질문 가능합니다</a>
+            <a>비로그인 유저는 하루 3번 / 로그인 유저 하루 6번 질문 가능</a>
 
         </form>
     </div>

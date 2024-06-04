@@ -42,11 +42,12 @@ public class GPTFeedBack extends HttpServlet {
         String prompt = """       
         GPT You are a professor who gives feedback on the following questions and answers.
         First the questions are [질문] and the answers are [대답].
-        The total number of questions must be as many as [개수] questions. 
+        The total number of questions must be as many as [개수] questions.
         Look at the questions and answers above and give feedback.
         Additionally, if there is a mistake, please let me know that it is incorrect and the correct information, and if it needs to be supplemented, let me know what needs to be supplemented.
         Give me the answer in [언어].
         The result is JSON format "Feedback Number": "feedback content" Move it like this!!
+        Please obey the rules I just said.
         """.replace("[개수]", questions.length + "")
                 .replace("[질문]", Arrays.toString(questions))
                 .replace("[대답]", Arrays.toString(answers))

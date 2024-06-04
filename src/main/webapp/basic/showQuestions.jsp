@@ -117,10 +117,10 @@
                 <form method="POST" style="display: flex; gap: 8px;">
                     <input type="hidden" name="action" value="increase">
                     <input placeholder="메시지를 입력하세요..."
-                        style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 10px; font-size: 0.875rem;"
-                        id="chatInput"
-                        type="text"
-                        name="inputAnswer"/>
+                           style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 10px; font-size: 0.875rem; color: white;"
+                           id="chatInput"
+                           type="text"
+                           name="inputAnswer"/>
                     <input type="submit" value="전송" class="primary" id="submitBtn"/>
                 </form>
             <%
