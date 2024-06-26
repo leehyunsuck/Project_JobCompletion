@@ -170,7 +170,6 @@
             <section>
                 <h3>제작자 (신구대학교)</h3>
                 <p>이현석 (leehyunsuck01@gmail.com) </p>
-                <p>김종욱 (메일입력란) </p>
             </section>
         </div>
         <div class="copyright">

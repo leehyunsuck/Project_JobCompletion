@@ -103,24 +103,6 @@
         document.getElementById('submitBtn').disabled = true;
     });
 
-    function scrollToBottomSlowly() {
-        const div = document.getElementById('chatDisplay');
-        const scrollHeight = div.scrollHeight;
-        const step = 1; // 한 번에 이동할 픽셀 수 (조정 가능)
-
-        let currentPosition = 0;
-        const scrollInterval = setInterval(() => {
-            currentPosition += step;
-            div.scrollTop = currentPosition;
-
-            if (currentPosition >= scrollHeight) {
-                clearInterval(scrollInterval); // 스크롤이 맨 아래로 도달하면 인터벌 종료
-            }
-        }, 15); // 100ms 간격으로 스크롤 조정 (조정 가능)
-    }
-
-    // 함수 호출
-    scrollToBottomSlowly();
 </script>
 
 </body>

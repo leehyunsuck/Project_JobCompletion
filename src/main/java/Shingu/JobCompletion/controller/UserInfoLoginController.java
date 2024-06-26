@@ -33,10 +33,6 @@ public class UserInfoLoginController extends HttpServlet {
         req.getSession().setAttribute("notFoundEmail", null);
         req.getSession().setAttribute("wrongPassword", null);
 
-        System.out.println(email);
-        System.out.println(password);
-        System.out.println(hashPassword);
-
         if (!userInfoService.isEmailExists(email)) {
             req.getSession().setAttribute("notFoundEmail", true);
             resp.sendRedirect("/basic/login.jsp");

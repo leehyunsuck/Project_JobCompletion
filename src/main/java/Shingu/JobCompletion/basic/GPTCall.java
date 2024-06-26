@@ -42,7 +42,7 @@ public class GPTCall extends HttpServlet {
         Integer count = Integer.parseInt(req.getParameter("count"));
         String lang = req.getParameter("lang");
         String notQuestion = req.getParameter("notQuestion").isEmpty() ? "" : req.getParameter("notQuestion");
-        Boolean diff = req.getParameterMap().containsKey("diff") && req.getParameter("diff").equals("true");
+        String diff = req.getParameter("diff").equals("true") ? "Advanced" : "Beginner and Intermediate";
 
         HttpSession session = req.getSession();
         if (keyword.isEmpty()) {
@@ -77,36 +77,49 @@ public class GPTCall extends HttpServlet {
 
         //프롬프트에 받은 파라미터값 넣기
         String prompt = """
-                GPT, You're an interviewer, I'm an interviewer. 
-                All questions are provided in [언어]. 
-                The types of questions are related to [키워드]. 
-                Generate exactly [개수] [challenging] questions. 
-                You don't answer the question.
-                Do not write unnecessary sentences other than interview questions.
-                [중복제거 앞 문장] [중복제거 질문] [중복제거 뒷 문장]
-                The last question is to judge the person, not the knowledgeable information, 
-                in the occupation associated with [키워드]. 
-                The total number of questions must be as many as [개수] questions. 
-                The result is JSON format "Question Number": "Content" Move it like this!!
+                Your role : interviewer
+                                
+                Technical interview type : [키워드]
+                                
+                Question difficulty : [난이도]
+                                
+                Total Question Count : [개수]
+                                
+                Respond language : [언어]
+                                
+                Rule :
+                - Interview questions only.
+                - Final question assesses character, not just knowledge, in [키워드] field.
+                                
+                                
+                Exclusion List :
+                - [중복제거]
+                                
+                Respond in JSON format:
+                {
+                    "Question 1": "Question Content",
+                    "Question 2": "Question Content",
+                    ...
+                    "Question [개수]": "Question Content"
+                }
                 """
-                .replace("[언어]", lang)
                 .replace("[키워드]", keyword)
+                .replace("[난이도]", diff)
                 .replace("[개수]", String.valueOf(count))
-                .replace("[challenging]", diff ? "challenging" : "")
-                .replace("[중복제거 앞 문장]", notQuestion.isEmpty() ? "" : "Ask questions so that they don't overlap with the following questions.")
-                .replace("[중복제거 질문]", notQuestion)
-                .replace("[중복제거 뒷 문장]", notQuestion.isEmpty() ? "" : "Generate new questions that do not overlap with the above.");
-
+                .replace("[언어]", lang)
+                .replace("[중복제거]", notQuestion);
 
         log(prompt);
-
         //GPT API에 응답 호출
         ChatGPTResponse gptResponse = customBotController.chat(prompt);
-        log(gptResponse.getChoices().get(0).getMessage().getContent());
 
         ipMap.put(ipAddress, ipMap.get(ipAddress) + 1);
 
         String s = gptResponse.getChoices().get(0).getMessage().getContent();
+
+        log(s);
+        log(ipAddress);
+        log(ipMap.get(ipAddress).toString());
 
         //웹에 보내기 테스트
         JSONObject sendJson = new JSONObject(s);
@@ -114,15 +127,10 @@ public class GPTCall extends HttpServlet {
         String[] answers = new String[count];
 
         for (int i = 1; i <= count; i++) {
-            String questionKey = "Question " + i;
-            if (sendJson.has(questionKey)) {
-                questions[i - 1] = sendJson.getString(questionKey);
-            } else {
-                questions[i - 1] = sendJson.getString(String.valueOf(i));  // i 값을 문자열로 변환하여 할당
-            }
+            if (sendJson.has("Question " + i)) questions[i - 1] = sendJson.getString("Question " + i);
+            else if (sendJson.has(i + "")) questions[i - 1] = sendJson.getString(String.valueOf(i));
+            else answers[i - 1] = "Error 404 Question";
         }
-
-
 
         session.setAttribute("questions", questions);
         session.setAttribute("keyword", keyword);

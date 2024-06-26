@@ -64,12 +64,38 @@
         <header class="special">
             <h2>History</h2>
         </header>
+
         <% if (currentPage > 1) { %>
-        <a href="?page=<%= currentPage - 1 %>">이전</a>
+        <a href="?page=<%= currentPage - 1 %>" style="
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+">이전</a>
         <% } %>
         <% if (history.size() > currentPage * questionsPerPage) { %>
-        <a href="?page=<%= currentPage + 1 %>">다음</a>
+        <a href="?page=<%= currentPage + 1 %>" style="
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+">다음</a>
         <% } %>
+
         <div class="highlights">
             <!-- 각 질문에 대한 섹션을 반복하여 출력 -->
             <c:forEach var="question" begin="<%= (currentPage - 1) * questionsPerPage %>"
@@ -80,95 +106,117 @@
                             <h3>${question.keyword}</h3> <!-- 키워드 출력 -->
                         </header>
                         <!-- 각 질문, 답변, 피드백을 순차적으로 출력 -->
-                        <p>${question.getQuestion1()}</p>
-                        <p>${question.getAnswers1()}</p>
-                        <p>${question.getFeedback1()}</p>
-                        <hr>
-                        <p>${question.getQuestion2()}</p>
-                        <p>${question.getAnswers2()}</p>
-                        <p>${question.getFeedback2()}</p>
-                        <hr>
-                        <p>${question.getQuestion3()}</p>
-                        <p>${question.getAnswers3()}</p>
-                        <p>${question.getFeedback3()}</p>
-                        <hr>
-                        <p>${question.getQuestion4()}</p>
-                        <p>${question.getAnswers4()}</p>
-                        <p>${question.getFeedback4()}</p>
-                        <hr>
-                        <p>${question.getQuestion5()}</p>
-                        <p>${question.getAnswers5()}</p>
-                        <p>${question.getFeedback5()}</p>
-                        <hr>
-                        <p>${question.getQuestion6()}</p>
-                        <p>${question.getAnswers6()}</p>
-                        <p>${question.getFeedback6()}</p>
-                        <hr>
-                        <p>${question.getQuestion7()}</p>
-                        <p>${question.getAnswers7()}</p>
-                        <p>${question.getFeedback7()}</p>
-                        <hr>
-                        <p>${question.getQuestion8()}</p>
-                        <p>${question.getAnswers8()}</p>
-                        <p>${question.getFeedback8()}</p>
-                        <hr>
-                        <p>${question.getQuestion9()}</p>
-                        <p>${question.getAnswers9()}</p>
-                        <p>${question.getFeedback9()}</p>
-                        <hr>
-                        <p>${question.getQuestion10()}</p>
-                        <p>${question.getAnswers10()}</p>
-                        <p>${question.getFeedback10()}</p>
+                        <c:if test="${not empty question.getQuestion1()}">
+                            <p style="font-weight: bold">${question.getQuestion1()}</p>
+                            <p>${question.getAnswers1()}</p>
+                            <p>${question.getFeedback1()}</p>
+                            <hr>
+                        </c:if>
+
+                        <c:if test="${not empty question.getQuestion2()}">
+                            <p style="font-weight: bold">${question.getQuestion2()}</p>
+                            <p>${question.getAnswers2()}</p>
+                            <p>${question.getFeedback2()}</p>
+                            <hr>
+                        </c:if>
+
+                        <c:if test="${not empty question.getQuestion3()}">
+                            <p style="font-weight: bold">${question.getQuestion3()}</p>
+                            <p>${question.getAnswers3()}</p>
+                            <p>${question.getFeedback3()}</p>
+                            <hr>
+                        </c:if>
+
+                        <c:if test="${not empty question.getQuestion4()}">
+                            <p style="font-weight: bold">${question.getQuestion4()}</p>
+                            <p>${question.getAnswers4()}</p>
+                            <p>${question.getFeedback4()}</p>
+                            <hr>
+                        </c:if>
+
+                        <c:if test="${not empty question.getQuestion5()}">
+                            <p style="font-weight: bold">${question.getQuestion5()}</p>
+                            <p>${question.getAnswers5()}</p>
+                            <p>${question.getFeedback5()}</p>
+                            <hr>
+                        </c:if>
+
+                        <c:if test="${not empty question.getQuestion6()}">
+                            <p style="font-weight: bold">${question.getQuestion6()}</p>
+                            <p>${question.getAnswers6()}</p>
+                            <p>${question.getFeedback6()}</p>
+                            <hr>
+                        </c:if>
+
+                        <c:if test="${not empty question.getQuestion7()}">
+                            <p style="font-weight: bold">${question.getQuestion7()}</p>
+                            <p>${question.getAnswers7()}</p>
+                            <p>${question.getFeedback7()}</p>
+                            <hr>
+                        </c:if>
+
+                        <c:if test="${not empty question.getQuestion8()}">
+                            <p style="font-weight: bold">${question.getQuestion8()}</p>
+                            <p>${question.getAnswers8()}</p>
+                            <p>${question.getFeedback8()}</p>
+                            <hr>
+                        </c:if>
+
+                        <c:if test="${not empty question.getQuestion9()}">
+                            <p style="font-weight: bold">${question.getQuestion9()}</p>
+                            <p>${question.getAnswers9()}</p>
+                            <p>${question.getFeedback9()}</p>
+                            <hr>
+                        </c:if>
+
+                        <c:if test="${not empty question.getQuestion10()}">
+                            <p style="font-weight: bold">${question.getQuestion10()}</p>
+                            <p>${question.getAnswers10()}</p>
+                            <p>${question.getFeedback10()}</p>
+                            <hr>
+                        </c:if>
+
                     </div>
                 </section>
             </c:forEach>
         </div>
         <!-- 페이지 네비게이션 버튼 -->
         <% if (currentPage > 1) { %>
-        <a href="?page=<%= currentPage - 1 %>">이전</a>
+        <a href="?page=<%= currentPage - 1 %>" style="
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+">이전</a>
         <% } %>
         <% if (history.size() > currentPage * questionsPerPage) { %>
-        <a href="?page=<%= currentPage + 1 %>">다음</a>
+        <a href="?page=<%= currentPage + 1 %>" style="
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+">다음</a>
         <% } %>
-    </div>
-</section>
-
-
-
-<!-- CTA -->
-<section id="cta" class="wrapper">
-    <div class="inner">
-        <h2>취업완</h2>
-        <p>해당 사이트를 통해 면접 준비 시간을 단축하여 <br>
-            더 많은걸 준비할 수 있으면 좋겠습니다! <br>
-            모두 그림에 있는 행복한 곰 처럼 취업에 성공하여 행복하길 기원합니다.
-        </p>
-    </div>
-</section>
-
-<!-- Testimonials -->
-<section class="wrapper">
-    <div class="inner">
-        <header class="special">
-            <h2>제작 동기</h2>
-            <p>지금 당장 저에게 필요한게 무엇일까 고민하였습니다. <br>
-                전 대학교 졸업예정자로 기술 면접을 준비해야하는 학생입니다. <br>
-                추 후 이걸 활용해서 준비하면 편하지 않을까? 생각하여 만들게 되었습니다.
-            </p>
-        </header>
     </div>
 </section>
 
 <!-- Footer -->
 <footer id="footer">
     <div class="inner">
-        <div class="content">
-            <section>
-                <h3>제작자 (신구대학교)</h3>
-                <p>이현석 (leehyunsuck01@gmail.com) </p>
-                <p>김종욱 (메일입력란) </p>
-            </section>
-        </div>
         <div class="copyright">
             <a>
                 Industrious by TEMPLATED

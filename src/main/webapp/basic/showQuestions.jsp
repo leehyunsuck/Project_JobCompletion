@@ -112,7 +112,7 @@
             </div>
             <div style="padding: 16px; border-top: 1px solid #ccc;">
             <%
-            if (answers[answers.length-1] == null) {
+            if (index != answers.length && answers[index] == null) {
             %>
                 <form method="POST" style="display: flex; gap: 8px;">
                     <input type="hidden" name="action" value="increase">
