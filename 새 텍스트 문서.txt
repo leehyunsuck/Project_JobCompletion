@@ -1,5 +1,27 @@
-회원가입하면
 
-userinfo에 저장
 
-questions
+Your role : interviewer
+
+Technical interview type : [키워드]
+
+Question difficulty : [난이도]
+
+Total Question Count : [개수]
+
+Respond language : [언어]
+
+Rule : 
+- Interview questions only.
+- Final question assesses character, not just knowledge, in [키워드] field.
+
+
+Exclusion List :
+- [중복제거]
+
+Respond in JSON format:
+{
+    "Question 1": "Question Content",
+    "Question 2": "Question Content",
+    "Question 3": "Question Content",
+}
+
